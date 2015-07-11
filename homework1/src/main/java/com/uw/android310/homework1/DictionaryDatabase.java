@@ -35,10 +35,11 @@ public class DictionaryDatabase {
     private static final int DATABASE_VERSION = 2;
 
     private final DictionaryOpenHelper mDatabaseOpenHelper;
-    private static final HashMap<String,String> mColumnMap = buildColumnMap();
+    private static final HashMap<String, String> mColumnMap = buildColumnMap();
 
     /**
      * Constructor
+     *
      * @param context The Context within which to work, used to create the DB
      */
     public DictionaryDatabase(Context context) {
@@ -51,8 +52,8 @@ public class DictionaryDatabase {
      * all columns, even if the value is the key. This allows the ContentProvider to request
      * columns w/o the need to know real column names and create the alias itself.
      */
-    private static HashMap<String,String> buildColumnMap() {
-        HashMap<String,String> map = new HashMap<String,String>();
+    private static HashMap<String, String> buildColumnMap() {
+        HashMap<String, String> map = new HashMap<String, String>();
         map.put(KEY_WORD, KEY_WORD);
         map.put(KEY_DEFINITION, KEY_DEFINITION);
         map.put(BaseColumns._ID, "rowid AS " +
@@ -67,13 +68,13 @@ public class DictionaryDatabase {
     /**
      * Returns a Cursor positioned at the word specified by rowId
      *
-     * @param rowId id of word to retrieve
+     * @param rowId   id of word to retrieve
      * @param columns The columns to include, if null then all are included
      * @return Cursor positioned to matching word, or null if not found.
      */
     public Cursor getWord(String rowId, String[] columns) {
         String selection = "rowid = ?";
-        String[] selectionArgs = new String[] {rowId};
+        String[] selectionArgs = new String[]{rowId};
 
         return query(selection, selectionArgs, columns);
 
@@ -85,13 +86,14 @@ public class DictionaryDatabase {
     /**
      * Returns a Cursor over all words that match the given query
      *
-     * @param query The string to search for
+     * @param query   The string to search for
      * @param columns The columns to include, if null then all are included
      * @return Cursor over all words that match, or null if none found.
      */
     public Cursor getWordMatches(String query, String[] columns) {
+        Log.d(TAG, "getWordMatches called " + query + " " + columns.toString());
         String selection = KEY_WORD + " MATCH ?";
-        String[] selectionArgs = new String[] {query+"*"};
+        String[] selectionArgs = new String[]{query + "*"};
 
         return query(selection, selectionArgs, columns);
 
@@ -112,9 +114,10 @@ public class DictionaryDatabase {
 
     /**
      * Performs a database query.
-     * @param selection The selection clause
+     *
+     * @param selection     The selection clause
      * @param selectionArgs Selection arguments for "?" components in the selection
-     * @param columns The columns to return
+     * @param columns       The columns to return
      * @return A Cursor over all rows matching the query
      */
     private Cursor query(String selection, String[] selectionArgs, String[] columns) {
@@ -122,6 +125,8 @@ public class DictionaryDatabase {
          * actual columns in the database, creating a simple column alias mechanism
          * by which the ContentProvider does not need to know the real column names
          */
+        Log.d(TAG, "DictionaryDB query called " + selection);
+
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
         builder.setTables(FTS_VIRTUAL_TABLE);
         builder.setProjectionMap(mColumnMap);
@@ -208,6 +213,7 @@ public class DictionaryDatabase {
 
         /**
          * Add a word to the dictionary.
+         *
          * @return rowId or -1 if failed
          */
         public long addWord(String word, String definition) {

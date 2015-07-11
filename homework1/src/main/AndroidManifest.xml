@@ -1,35 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.uw.android310.homework1" >
+    package="com.uw.android310.homework1">
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
 
         <!-- Provides search suggestions for words and their definitions. -->
         <provider
             android:name=".DictionaryProvider"
-            android:authorities="com.uw.android310.homework1.DictionaryProvider" />
+            android:authorities="com.uw.android310.homework1.DictionaryProvider"
+            android:exported="false" />
+        <!-- GOTCHA:set exported to false, otherwise, your content provider is accessible by other apps by default -->
 
-        <!-- TODO: Set the launch mode. -->
+        <!--singleTop - see notes in SearchableActivity-->
         <activity
             android:name=".SearchableActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:launchMode="singleTop">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-            <!-- TODO: Add an intent filter to receive search requests. -->
-            <!-- Your code here -->
+            <!--intent filter, see notes in SearchableActivity-->
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+                <!-- No category needed, because the Intent will specify this class component-->
+            </intent-filter>
 
-            <!-- TODO: Point to searchable configuration. -->
-            <!-- Your code here -->
+
+            <!--searchable configuration - see notes in SearchableActivity-->
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
         </activity>
+
+        <activity android:name=".DefinitionActivity" />
+
     </application>
 
 </manifest>

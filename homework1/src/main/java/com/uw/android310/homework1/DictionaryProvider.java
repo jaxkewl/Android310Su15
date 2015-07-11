@@ -8,13 +8,14 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
+import android.util.Log;
 
 
 /**
  * Provides access to the dictionary database.
  */
 public class DictionaryProvider extends ContentProvider {
-    String TAG = "DictionaryProvider";
+    String TAG = DictionaryProvider.class.getSimpleName();
 
     public static String AUTHORITY = "com.uw.android310.homework1.DictionaryProvider";
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/dictionary");
@@ -38,7 +39,7 @@ public class DictionaryProvider extends ContentProvider {
      * Builds up a UriMatcher for search suggestion and shortcut refresh queries.
      */
     private static UriMatcher buildUriMatcher() {
-        UriMatcher matcher =  new UriMatcher(UriMatcher.NO_MATCH);
+        UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         // to get definitions...
         matcher.addURI(AUTHORITY, "dictionary", SEARCH_WORDS);
         matcher.addURI(AUTHORITY, "dictionary/#", GET_WORD);
@@ -74,20 +75,55 @@ public class DictionaryProvider extends ContentProvider {
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
                         String sortOrder) {
 
+        Log.d(TAG, "query called with " + uri.toString());
+
+        Log.d(TAG, "URI Type: " + sURIMatcher.match(uri));
+
+
+        //Log.d(TAG, "setting queryBuilder table(s) to: " + queryBuilder.getTables());
+/*
+        String dProj = "";
+        for (String s : projection) {
+            dProj += s + " ";
+        }
+        Log.d(TAG, "projection: " + dProj);
+*/
+
+        if (null != selectionArgs) {
+            String dSel = "";
+            for (String s : selectionArgs) {
+                dSel += s + " ";
+            }
+            Log.d(TAG, "selectionArgs: " + dSel);
+        }
+        Log.d(TAG, "selections: " + selection);
+        Log.d(TAG, "sort order: " + sortOrder);
+
         // Use the UriMatcher to see what kind of query we have and format the db query accordingly
         switch (sURIMatcher.match(uri)) {
             case SEARCH_SUGGEST:
+                //selection args must be provided for this uri type
+                Log.d(TAG, "SEARCH_SUGGEST called...");
+
+                //GOTCHA: selectionArgs is not null because we added an attribute in
+                //the searchable.xml
+
+
                 if (selectionArgs == null) {
                     throw new IllegalArgumentException(
                             "selectionArgs must be provided for the Uri: " + uri);
                 }
                 return getSuggestions(selectionArgs[0]);
-            case SEARCH_WORDS:
+            case SEARCH_WORDS:   //Uri type is 0
+                Log.d(TAG, "SEARCH_WORDS called...");
                 if (selectionArgs == null) {
                     throw new IllegalArgumentException(
                             "selectionArgs must be provided for the Uri: " + uri);
                 }
-                return search(selectionArgs[0]);
+
+                Cursor data = search(selectionArgs[0]);
+
+                return data;
             case GET_WORD:
                 return getWord(uri);
             case REFRESH_SHORTCUT:
@@ -98,8 +134,9 @@ public class DictionaryProvider extends ContentProvider {
     }
 
     private Cursor getSuggestions(String query) {
+        Log.d(TAG, "getSuggestions " + query);
         query = query.toLowerCase();
-        String[] columns = new String[] {
+        String[] columns = new String[]{
                 BaseColumns._ID,
                 DictionaryDatabase.KEY_WORD,
                 DictionaryDatabase.KEY_DEFINITION,
@@ -111,8 +148,10 @@ public class DictionaryProvider extends ContentProvider {
     }
 
     private Cursor search(String query) {
+        Log.d(TAG, "Search called... " + query);
+
         query = query.toLowerCase();
-        String[] columns = new String[] {
+        String[] columns = new String[]{
                 BaseColumns._ID,
                 DictionaryDatabase.KEY_WORD,
                 DictionaryDatabase.KEY_DEFINITION};
@@ -122,7 +161,7 @@ public class DictionaryProvider extends ContentProvider {
 
     private Cursor getWord(Uri uri) {
         String rowId = uri.getLastPathSegment();
-        String[] columns = new String[] {
+        String[] columns = new String[]{
                 DictionaryDatabase.KEY_WORD,
                 DictionaryDatabase.KEY_DEFINITION};
 
@@ -138,7 +177,7 @@ public class DictionaryProvider extends ContentProvider {
        * suggestion query.
        */
         String rowId = uri.getLastPathSegment();
-        String[] columns = new String[] {
+        String[] columns = new String[]{
                 BaseColumns._ID,
                 DictionaryDatabase.KEY_WORD,
                 DictionaryDatabase.KEY_DEFINITION,

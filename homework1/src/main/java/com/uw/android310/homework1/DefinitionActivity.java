@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 
@@ -15,18 +16,25 @@ import android.widget.TextView;
  * Displays the selected word and its definition.
  */
 public class DefinitionActivity extends AppCompatActivity {
+
+    public static final String TAG = DefinitionActivity.class.getSimpleName();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_definition);
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             ActionBar actionBar = getSupportActionBar();
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
         Uri uri = getIntent().getData();
+        Log.d(TAG, "onCreate with uri: " + uri);
         Cursor cursor = managedQuery(uri, null, null, null, null);
+
+        //Toast.makeText(this, uri.toString(), Toast.LENGTH_LONG).show();
 
         if (cursor == null) {
             finish();
