@@ -25,7 +25,7 @@ public class StringUtil {
          * @return true if query string is valid and appropriate, false otherwise
          */
         public static boolean isQueryStringValidAndAppropriate(@NonNull String unSanitizedQueryString) {
-            // TODO: Implement String sanitize and filter curse words, inappropriate search results, etc.
+            // Implement String sanitize and filter curse words, inappropriate search results, etc.
             return true;
         }
     }

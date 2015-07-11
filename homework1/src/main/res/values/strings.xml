@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Homework1</string>
+
+    <string name="action_search">Search</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_searchable">SearchableActivity</string>
+
+    <string name="error_no_results">No results!</string>
+</resources>

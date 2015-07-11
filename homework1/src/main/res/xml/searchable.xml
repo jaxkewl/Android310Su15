@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- TODO: Modify your searchable configuration.
+
+Required fields:
+label - This should be your application name
+
+Optional fields:
+hint - Not required, but useful for letting users know what they can search.
+
+What you will need to update:
+1. Declare the search authority with the provided content provider (DictionaryProvider).
+2. Declare the intent action.
+3. Declare the intent data.
+4. Bonus - Include results in global search.
+-->
+
+<!-- The attributes below configure the Android search box appearance
+     and the search suggestions settings.
+
+     For the complete list of settings:
+     http://developer.android.com/guide/topics/search/searchable-config.html
+-->
+<searchable
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:searchSuggestSelection=" ?" />
