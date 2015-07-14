@@ -1,11 +1,14 @@
 package com.uw.android310.lesson3;
 
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import java.util.List;
 
@@ -19,12 +22,25 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Button button = (Button) findViewById(R.id.button_sensor);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG_SENSORS, "**************************************hello");
+                Intent intent = new Intent(MainActivity.this, SensorActivity.class);
+                startActivity(intent);
+            }
+        });
+
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
         List<Sensor> deviceSensors = mSensorManager.getSensorList(Sensor.TYPE_ALL);
-        Log.d(TAG_SENSORS, deviceSensors.toString());
+        for (Sensor s : deviceSensors) {
+            Log.d(TAG_SENSORS, s.toString());
+        }
+        Log.d(TAG_SENSORS, "**************************************" + deviceSensors.toString());
 
-        Sensor magneticFieldSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+/*        Sensor magneticFieldSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         if (magneticFieldSensor != null){
             // Success! There's a magnetometer.
             logSensorData(magneticFieldSensor);
@@ -53,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (gravitySensor != null) {
             logSensorData(gravitySensor);
-        }
+        }*/
     }
 
     private void logSensorData(Sensor sensor) {

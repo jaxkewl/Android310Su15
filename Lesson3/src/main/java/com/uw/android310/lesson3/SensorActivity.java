@@ -7,6 +7,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.util.Log;
 
 
 public class SensorActivity extends Activity implements SensorEventListener {
@@ -17,6 +18,8 @@ public class SensorActivity extends Activity implements SensorEventListener {
     public final void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sensor);
+
+        Log.d("martin", "**************************************hellohello onCreate");
 
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mLight = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
@@ -33,6 +36,9 @@ public class SensorActivity extends Activity implements SensorEventListener {
         // Many sensors return 3 values, one for each axis.
         float lux = event.values[0];
         // Do something with this sensor value.
+
+        Log.d("martin", "+++++++++++++++++++++++++    " + lux);
+
     }
 
     @Override
