@@ -1,1 +1,2 @@
+include ':lesson4'
 include 'Lesson1', 'Lesson2', 'Core', 'homework1', 'Lesson3'
